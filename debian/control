@@ -1,0 +1,18 @@
+Source: appengine-sdk-package
+Section: devel
+Priority: extra
+Maintainer: Ronoaldo JLP <ronoaldo@gmail.com>
+Build-Depends: cdbs, debhelper (>= 8.0.0)
+Standards-Version: 3.9.3
+Vcs-Hg: http://bitbucket.org/ronoaldoappengine-sdk-package
+
+Package: appengine-sdk-package
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: simple tool to package AppEngine SDKs as deb packages
+ This tool allows you to build a simple .deb
+ package from the binary AppEngine SDK zip file.
+ .
+ The main goal is to allow system administrators
+ to upgrade easier the SDK on a broader range of
+ machiens by leaveraging tools like apt or aptitude
