@@ -1,0 +1,10 @@
+go-appengine-sdk for Debian
+---------------------------
+
+Steps to reproduce the download and repackage of the binary zipball:
+
+wget http://googleappengine.googlecode.com/files/go_appengine_sdk_linux_amd64-$VERSION.zip
+unzip -q go_appengine_sdk_linux_amd64-$VERSION.zip
+rm go_appengine_sdk_linux_amd64-$VERSION.zip
+mv google_appengine go-appengine-sdk-$VERSION
+tar cvzf go-appengine-sdk_$VERSION.orig.tar.gz go-appengine-sdk-$VERSION

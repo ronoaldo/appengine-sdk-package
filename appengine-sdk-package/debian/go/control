@@ -1,0 +1,26 @@
+Source: go-appengine-sdk
+Section: devel
+Priority: extra
+Maintainer: $DEBFULLNAME <$DEBEMAIL>
+Build-Depends: cdbs, debhelper (>= 8.0.0)
+Standards-Version: 3.9.3
+Homepage: http://developers.google.com/appengine
+
+Package: go-appengine-sdk
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: golang Google AppEngine SDK
+ Google App Engine enables you to build web applications 
+ on the same scalable systems that power Google 
+ applications. 
+ .
+ App Engine applications are easy to build, easy to 
+ maintain, and easy to scale as your traffic and data 
+ storage needs grow. 
+ .
+ With App Engine, there are no servers to maintain: 
+ You just upload your application, and it's ready to 
+ serve to your users.
+ .
+ This package provides the Go runtime and software
+ development kit

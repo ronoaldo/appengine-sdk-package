@@ -1,0 +1,110 @@
+#!/bin/bash
+
+# Copyright 2013 Ronoaldo JLP (http://www.ronoaldo.net)
+# 
+#   Licensed under the Apache License, Version 2.0 (the 'License');
+#   you may not use this file except in compliance with the License.
+#   You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+#   Unless required by applicable law or agreed to in writing, software
+#   distributed under the License is distributed on an 'AS IS' BASIS,
+#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#   See the License for the specific language governing permissions and
+#   limitations under the License.
+
+set -e
+
+# Fail the script with a message. Exists with error code 1
+fatal() {
+	echo "$@" >&2
+	exit 1
+}
+
+# Detects the SDK type
+sdk_type() {
+	case $(basename $1) in
+		go_appengine*)
+			echo go
+			;;
+		appengine-java-*)
+			echo java
+			;;
+		google_appengine*)
+			echo python
+			;;
+		*)
+			fatal "Unsuported SKD type $1"
+			;;
+	esac
+}
+
+# Detects the SDK version
+sdk_version() {
+	echo "$1" | grep -E "(([0-9]+)+\.)+[0-9]+" -o
+}
+
+# Create the .orig file and renames the directory
+create_orig() {
+	unzip -q $SDK_FILE
+	mv google_appengine "$DIR"
+	tar czf "$ORIG" "$DIR"
+}
+
+# Creates the debian directory, and replactes tokens from
+# template files
+create_debian_dir() {
+	mkdir -p $DIR/debian
+	cp -pvrf $LIB/debian/$SDK/* $DIR/debian/
+	for f in $DIR/debian/* $DIR ; do
+		if [ -f $f ] ; then
+			sed -e "s;\$VERSION;$VERSION;g" \
+				-e "s;\$SDK;$SDK;g" \
+				-e "s;\$DEBFULLNAME;$DEBFULLNAME;g" \
+				-e "s;\$DEBEMAIL;$DEBEMAIL;g" \
+				-e "s;\$DATE;$DATE;g" \
+				-i $f
+		fi
+	done
+}
+
+# Creates the debian package
+create_debian_package() {
+	( cd $DIR && debuild ) 2>&1 > $LOG
+}
+
+# Clean up temporary directory and build tree
+cleanup() {
+	mv -iv $BUILDDIR/{*.tar.gz,*.deb,*.build,*.dsc,*.changes} $OLDDIR
+	echo rm -rvf $BUILDDIR
+}
+
+# Environment
+export SDK_FILE="$(readlink -f $1)"
+export SDK="$(sdk_type "$SDK_FILE")"
+export VERSION="$(sdk_version "$SDK_FILE")"
+export DIR=$SDK-appengine-sdk-$VERSION
+export ORIG=$SDK-appengine-sdk_$VERSION.orig.tar.gz
+export LIB="${LIB:-/usr/share/appengine-sdk-package}"
+export DATE="$(date --rfc-2822)"
+export LOG="make-sdk-package.$$.log"
+export OLDDIR="$PWD"
+export BUILDDIR="$(mktemp -d)"
+
+cd "$BUILDDIR"
+echo "SDK=$SDK; VERSION=$VERSION"
+
+echo "Creating .orig file ..."
+create_orig $1
+
+echo "Creating debian dir ..."
+create_debian_dir $DIR
+
+echo "Creating package ..."
+create_debian_package
+
+echo "Cleaning up ..."
+cd $OLDDIR
+cleanup
+

@@ -1,0 +1,7 @@
+go-appengine-sdk for Debian
+---------------------------
+
+This is an unnoficial package made to help install the Go AppEngine SDK
+on Debian systems.
+
+ -- $DEBFULLNAME <$DEBEMAIL>  $DATE

@@ -1,0 +1,5 @@
+go-appengine-sdk ($VERSION-1) unstable; urgency=low
+
+  * Initial release.
+
+ -- $DEBFULLNAME <$DEBEMAIL>  $DATE
