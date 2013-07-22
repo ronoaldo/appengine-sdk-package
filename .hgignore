@@ -1,0 +1,5 @@
+syntax: glob
+debian/appengine-sdk-package/*
+debian/appengine-sdk-package.substvars
+debian/appengine-sdk-package.debhelper.log
+debian/files
