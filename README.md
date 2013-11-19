@@ -22,7 +22,7 @@ Install dependencies on your Debian-based linux box:
 
 Build the .deb from source root
 
-    $ git clone https://github.org/ronoaldo/appengine-sdk-package
+    $ git clone https://github.com/ronoaldo/appengine-sdk-package
     $ cd appengine-sdk-package && debuild
     $ cd ..
 
